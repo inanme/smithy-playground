@@ -1,13 +1,14 @@
-import smithy4s.hello._
 import cats.effect._
 import cats.syntax.all._
-import org.http4s.syntax.all._
+
+import com.comcast.ip4s._
+import org.http4s._
+import org.http4s.client.Client
 import org.http4s.ember.client._
 import org.http4s.ember.server._
-import org.http4s._
-import com.comcast.ip4s._
-import org.http4s.client.Client
+import org.http4s.syntax.all._
 import smithy4s._
+import smithy4s.hello._
 import smithy4s.http4s._
 
 object HelloWorldImpl extends HelloWorldService[IO] {

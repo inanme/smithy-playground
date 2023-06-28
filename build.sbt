@@ -8,8 +8,6 @@ inThisBuild(
     scalacOptions += "-Wconf:msg=\\$implicit\\$:s",
     semanticdbEnabled := true,                        // enable SemanticDB
     semanticdbVersion := scalafixSemanticdb.revision, // use Scalafix compatible version
-    scalafixDependencies += Dependencies.organizeImports,
-    testFrameworks += new TestFramework("weaver.framework.CatsEffect"),
     libraryDependencies ++= Seq(
       Dependencies.weaver % Test
     )
@@ -71,7 +69,11 @@ lazy val smithy = project
           case other      => other
         })
       }
-    }
+    },
+    // https://github.com/cb372/sbt-explicit-dependencies/issues/33
+    unusedCompileDependenciesFilter := moduleFilter() -
+      moduleFilter("com.disneystreaming.smithy", "aws-kinesis-spec") -
+      moduleFilter("com.disneystreaming.alloy", "alloy-core")
   )
   .dependsOn(transformer)
   .aggregate(transformer)
@@ -91,21 +93,24 @@ lazy val http4s = project
   .settings(
     name := "http4s-playground",
     libraryDependencies ++= Seq(
-      "ch.qos.logback"                % "logback-classic"         % Version.logback,
-      "ch.qos.logback"                % "logback-core"            % Version.logback,
-      "org.typelevel"                %% "cats-core"               % Version.cats,
-      "org.typelevel"                %% "cats-effect"             % Version.catsEffect,
-      "org.typelevel"                %% "cats-effect-kernel"      % Version.catsEffect,
-      "co.fs2"                       %% "fs2-core"                % Version.fs2,
       "co.fs2"                       %% "fs2-io"                  % Version.fs2,
+      "com.comcast"                  %% "ip4s-core"               % "3.3.0",
+      "com.disneystreaming.smithy4s" %% "smithy4s-core"           % smithy4sVersion.value,
+      "com.disneystreaming.smithy4s" %% "smithy4s-http4s"         % smithy4sVersion.value,
+      "com.disneystreaming.smithy4s" %% "smithy4s-http4s-swagger" % smithy4sVersion.value,
       "org.http4s"                   %% "http4s-client"           % Version.http4s,
+      "org.http4s"                   %% "http4s-core"             % Version.http4s,
       "org.http4s"                   %% "http4s-ember-client"     % Version.http4s,
       "org.http4s"                   %% "http4s-ember-server"     % Version.http4s,
-      "com.disneystreaming.smithy4s" %% "smithy4s-core"           % smithy4sVersion.value,
-      "com.disneystreaming.smithy4s" %% "smithy4s-aws-kernel"     % smithy4sVersion.value,
-      "com.disneystreaming.smithy4s" %% "smithy4s-aws"            % smithy4sVersion.value,
-      "com.disneystreaming.smithy4s" %% "smithy4s-aws-http4s"     % smithy4sVersion.value,
-      "com.disneystreaming.smithy4s" %% "smithy4s-http4s"         % smithy4sVersion.value,
-      "com.disneystreaming.smithy4s" %% "smithy4s-http4s-swagger" % smithy4sVersion.value
+      "org.http4s"                   %% "http4s-server"           % Version.http4s,
+      "org.typelevel"                %% "cats-core"               % Version.cats,
+      "org.typelevel"                %% "cats-effect"             % Version.catsEffect,
+      "org.typelevel"                %% "cats-effect-kernel"      % Version.catsEffect
+      // "ch.qos.logback"                % "logback-classic"         % Version.logback,
+      // "ch.qos.logback"                % "logback-core"            % Version.logback,
+      // "co.fs2"                       %% "fs2-core"                % Version.fs2,
+      // "com.disneystreaming.smithy4s" %% "smithy4s-aws"            % smithy4sVersion.value,
+      // "com.disneystreaming.smithy4s" %% "smithy4s-aws-http4s"     % smithy4sVersion.value,
+      // "com.disneystreaming.smithy4s" %% "smithy4s-aws-kernel"     % smithy4sVersion.value,
     )
   )

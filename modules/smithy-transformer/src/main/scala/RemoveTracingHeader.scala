@@ -1,6 +1,8 @@
-import software.amazon.smithy.build.{ ProjectionTransformer, TransformContext }
+import software.amazon.smithy.build.ProjectionTransformer
+import software.amazon.smithy.build.TransformContext
 import software.amazon.smithy.model.Model
-import software.amazon.smithy.model.shapes.{ ShapeId, ToShapeId }
+import software.amazon.smithy.model.shapes.ShapeId
+import software.amazon.smithy.model.shapes.ToShapeId
 
 class RemoveTracingHeader extends ProjectionTransformer {
   override def getName: String = getClass.getSimpleName
