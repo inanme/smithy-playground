@@ -7,7 +7,7 @@ val Versions = new {
   val tpolecat           = "0.4.2"
   val organizeImports    = "0.6.0"
   val scalafmt           = "2.5.0"
-  val smithy4sSbtCodegen = "0.17.10"
+  val smithy4sSbtCodegen = "0.17.19"
 }
 
 addSbtPlugin("ch.epfl.scala"                % "sbt-missinglink"      % Versions.sbtMissinglink)

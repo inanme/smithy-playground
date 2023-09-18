@@ -19,6 +19,10 @@ object HelloWorldImpl extends HelloWorldService[IO] {
     }
 }
 
+object HelloWorldStub {
+  val stub = new HelloWorldService.Default[IO](IO.stub)
+}
+
 object Routes {
   private val example: Resource[IO, HttpRoutes[IO]] =
     SimpleRestJsonBuilder.routes(HelloWorldImpl).resource
@@ -31,7 +35,7 @@ object Routes {
 
 object ServerMain extends IOApp.Simple {
 
-  val run = Routes.all
+  val run: IO[Unit] = Routes.all
     .flatMap { routes =>
       EmberServerBuilder
         .default[IO]
@@ -89,7 +93,7 @@ object ClientMain extends IOApp.Simple {
     helloClient <- ClientMain(uri, client, HelloWorldService)
   } yield helloClient
 
-  val run = helloWorldClient.use(c =>
+  val run: IO[Unit] = helloWorldClient.use(c =>
     c.hello("Sam", Some("New York City"))
       .flatMap(greeting => IO.println(greeting.message))
   )
